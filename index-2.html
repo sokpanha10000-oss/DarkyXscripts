@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08080b">
+    <title>Darky Scripts</title>
+
+    <style>
+        :root {
+            --background: #08080b;
+            --panel: #101015;
+            --panel-light: #15151c;
+            --border: rgba(255, 255, 255, 0.09);
+            --text: #f5f5f7;
+            --muted: #9a9aa7;
+            --accent: #ffaf0f;
+            --accent-light: #ffc34d;
+            --success: #45d483;
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background: var(--background);
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        button,
+        a {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 30px));
+            margin: 0 auto;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8, 8, 11, 0.78);
+            backdrop-filter: blur(16px);
+        }
+
+        .navbar-inner {
+            min-height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            color: #111;
+            background: linear-gradient(145deg, #ffd477, #ff9a00);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 6px;
+        }
+
+        .nav-link {
+            padding: 9px 12px;
+            border-radius: 10px;
+            color: var(--muted);
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .hero {
+            padding: 72px 0 40px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 7px 10px;
+            border: 1px solid rgba(255, 175, 15, 0.18);
+            border-radius: 999px;
+            color: var(--accent-light);
+            background: rgba(255, 175, 15, 0.06);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .hero h1 {
+            max-width: 800px;
+            margin: 16px 0 12px;
+            font-size: clamp(40px, 8vw, 76px);
+            line-height: 0.98;
+            letter-spacing: -0.05em;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 25px 0 16px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .section-header span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .script-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding-bottom: 60px;
+        }
+
+        .script-card {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--panel);
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .script-image {
+            min-height: 180px;
+            display: flex;
+            align-items: end;
+            padding: 16px;
+            background:
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08), transparent 25%),
+                linear-gradient(135deg, rgba(255, 175, 15, 0.28), rgba(255, 255, 255, 0.02));
+        }
+
+        .script-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .script-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .script-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, 0.72));
+            pointer-events: none;
+        }
+
+        .script-label {
+            position: relative;
+            z-index: 2;
+            padding: 6px 9px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.35);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .script-content {
+            padding: 16px;
+        }
+
+        .script-content h3 {
+            margin: 0 0 7px;
+            font-size: 18px;
+        }
+
+        .script-content p {
+            min-height: 40px;
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px 14px;
+            border: 0;
+            border-radius: 12px;
+            font-weight: 800;
+            transition: 0.2s;
+        }
+
+        .button-primary {
+            color: #111;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+        }
+
+        .button-primary:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+        }
+
+        .button-dark {
+            color: var(--text);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .button-dark:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .video-section {
+            padding-bottom: 60px;
+        }
+
+        .video-box {
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: #050507;
+        }
+
+        .video-box iframe,
+        .video-box video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 0;
+        }
+
+        .footer {
+            padding: 28px 0 42px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .modal-background {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            place-items: center;
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-background.show {
+            display: grid;
+        }
+
+        .modal {
+            width: min(560px, 100%);
+            max-height: calc(100vh - 36px);
+            overflow: auto;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: #0f0f14;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .modal-description {
+            margin: 8px 0 18px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .close-button {
+            width: 38px;
+            height: 38px;
+            border: 0;
+            border-radius: 10px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .task-list {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .task {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .task strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+
+        .task span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .task-button {
+            min-width: 90px;
+            padding: 9px 11px;
+            border: 0;
+            border-radius: 10px;
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.07);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .task.done {
+            border-color: rgba(69, 212, 131, 0.25);
+            background: rgba(69, 212, 131, 0.05);
+        }
+
+        .task.done .task-button {
+            color: #07130c;
+            background: var(--success);
+        }
+
+        .unlock-message {
+            display: none;
+            margin: 10px 0;
+            color: var(--success);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .unlock-message.show {
+            display: block;
+        }
+
+        .script-page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .script-page.show {
+            display: block;
+        }
+
+        .script-view {
+            padding: 50px 0 70px;
+        }
+
+        .back-button {
+            width: auto;
+            margin-bottom: 22px;
+        }
+
+        .code-box {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #0d0d12;
+        }
+
+        .code-header {
+            padding: 15px 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .code-header span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            overflow: auto;
+            color: #ededf2;
+            background: #08080b;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .copy-area {
+            padding: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .copy-button.copied {
+            color: #07130c;
+            background: var(--success);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 900px) {
+            .script-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 620px) {
+            .nav-link {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 48px;
+            }
+
+            .script-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .task {
+                grid-template-columns: 1fr;
+            }
+
+            .task-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+        ================================================
+        EDIT YOUR WEBSITE BELOW
+        ================================================
+
+        You only need to change the SITE and SCRIPTS sections
+        near the bottom of this file.
+    -->
+
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a class="brand" href="#" onclick="showHome(); return false;">
+                <span class="brand-logo">D</span>
+                <span id="brandName">Darky Scripts</span>
+            </a>
+
+            <div class="nav-links">
+                <a class="nav-link" href="#scripts">Scripts</a>
+                <a class="nav-link" href="#videos">Videos</a>
+                <a class="nav-link" id="discordLink" href="#" target="_blank" rel="noopener">
+                    Discord
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="homePage">
+        <section class="container hero">
+            <span class="hero-badge">Script Hub</span>
+
+            <h1 id="heroTitle">
+                Share your scripts. Keep everything in one place.
+            </h1>
+
+            <p id="heroDescription">
+                Pick a script, complete the unlock steps, then copy the code from its own page.
+            </p>
+        </section>
+
+        <section class="container" id="scripts">
+            <div class="section-header">
+                <h2>Scripts</h2>
+                <span id="scriptCount">0 scripts</span>
+            </div>
+
+            <div class="script-grid" id="scriptGrid"></div>
+        </section>
+
+        <section class="container video-section" id="videos">
+            <div class="section-header">
+                <h2>Latest Video</h2>
+                <span>Replace it with your own video</span>
+            </div>
+
+            <div class="video-box" id="homeVideoBox"></div>
+        </section>
+    </main>
+
+    <main id="scriptPage" class="script-page">
+        <section class="container script-view">
+            <button
+                class="button button-dark back-button"
+                type="button"
+                onclick="showHome()">
+                ← Back to Scripts
+            </button>
+
+            <div class="section-header">
+                <div>
+                    <h2 id="scriptPageTitle">Script</h2>
+                    <span id="scriptPageDescription"></span>
+                </div>
+            </div>
+
+            <div class="code-box">
+                <div class="code-header">
+                    <h2>Script Code</h2>
+                    <span id="scriptMeta">Lua</span>
+                </div>
+
+                <pre id="codeBlock"></pre>
+
+                <div class="copy-area">
+                    <button
+                        class="button button-primary copy-button"
+                        id="copyButton"
+                        type="button"
+                        onclick="copyScript()">
+                        Copy Script
+                    </button>
+                </div>
+            </div>
+
+            <section class="video-section" id="scriptVideoSection">
+                <div class="section-header">
+                    <h2>How to Use</h2>
+                    <span>Optional video</span>
+                </div>
+
+                <div class="video-box" id="scriptVideoBox"></div>
+            </section>
+        </section>
+    </main>
+
+    <div class="modal-background" id="unlockModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <h2>Unlock This Script</h2>
+
+                    <p class="modal-description">
+                        Complete the steps below, then press Get Script.
+                    </p>
+                </div>
+
+                <button
+                    class="close-button"
+                    type="button"
+                    onclick="closeModal()">
+                    ✕
+                </button>
+            </div>
+
+            <div class="task-list" id="taskList"></div>
+
+            <div class="unlock-message" id="unlockMessage">
+                All required steps are complete.
+            </div>
+
+            <button
+                class="button button-primary"
+                id="unlockButton"
+                type="button"
+                disabled>
+                Get Script
+            </button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <span id="footerText"></span>
+        </div>
+    </footer>
+
+    <script>
+        /*
+            ================================================
+            SITE SETTINGS
+            ================================================
+
+            Change these values for your website.
+        */
+
+        const SITE = {
+            name: "Darky Scripts",
+
+            heroTitle: "Share your scripts. Keep everything in one place.",
+
+            heroDescription:
+                "Pick a script, complete the unlock steps, then copy the code from its own page.",
+
+            discordUrl: "https://discord.gg/YOUR-DISCORD",
+
+            subscribeUrl:
+                "https://m.youtube.com/watch?v=7azqHOHMgPw&t=7s",
+
+            likeUrl:
+                "https://m.youtube.com/watch?v=eQYaV8cZ5wg&t=9s",
+
+            latestVideo:
+                "https://m.youtube.com/watch?v=7azqHOHMgPw&t=7s"
+        };
+
+        /*
+            ================================================
+            YOUR SCRIPTS
+            ================================================
+
+            Copy one script object to make another script card.
+        */
+
+        const SCRIPTS = [
+            {
+                id: "example-1",
+                name: "Example Script",
+                description: "Replace this with your first script.",
+                label: "SCRIPT #01",
+
+            // Optional custom image. Leave empty to use the YouTube thumbnail automatically.
+            image: "",
+
+            code: `-- Example Script
+print("Replace this with your own code")
+
+-- Put your script here
+`,
+
+                // You can use a normal YouTube link, youtu.be link, Shorts link,
+                // embed link, or a direct .mp4/.webm/.ogg file URL.
+                video: "https://m.youtube.com/watch?v=7azqHOHMgPw&t=7s"
+            },
+
+            {
+                id: "example-2",
+                name: "Premium Script",
+                description: "Use this card for another script.",
+                label: "SCRIPT #02",
+
+                code: `-- Premium Script
+print("Your premium script goes here")
+`,
+
+                video: ""
+            }
+        ];
+
+        /*
+            ================================================
+            WEBSITE LOGIC
+            ================================================
+        */
+
+        let selectedScript = null;
+        let completedTasks = new Set();
+
+        function getElement(id) {
+            return document.getElementById(id);
+        }
+
+        function initializeWebsite() {
+            getElement("brandName").textContent = SITE.name;
+            getElement("heroTitle").textContent = SITE.heroTitle;
+            getElement("heroDescription").textContent = SITE.heroDescription;
+            getElement("discordLink").href = SITE.discordUrl;
+            renderVideo("homeVideoBox", SITE.latestVideo, "Latest video");
+            getElement("footerText").textContent =
+                `© ${new Date().getFullYear()} ${SITE.name}.`;
+
+            renderScripts();
+        }
+
+        function renderScripts() {
+            const grid = getElement("scriptGrid");
+
+            grid.innerHTML = "";
+
+            SCRIPTS.forEach(function (script) {
+                const card = document.createElement("article");
+                card.className = "script-card";
+
+                const image = document.createElement("div");
+                image.className = "script-image";
+
+                const videoId = getYouTubeId(script.video);
+
+                if (script.image) {
+                    const imageElement = document.createElement("img");
+                    imageElement.src = script.image;
+                    imageElement.alt = script.name;
+                    image.appendChild(imageElement);
+                } else if (videoId) {
+                    const imageElement = document.createElement("img");
+                    imageElement.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                    imageElement.alt = `${script.name} video thumbnail`;
+                    image.appendChild(imageElement);
+                }
+
+                const label = document.createElement("span");
+                label.className = "script-label";
+                label.textContent = script.label;
+
+                image.appendChild(label);
+
+                const content = document.createElement("div");
+                content.className = "script-content";
+
+                const title = document.createElement("h3");
+                title.textContent = script.name;
+
+                const description = document.createElement("p");
+                description.textContent = script.description;
+
+                const button = document.createElement("button");
+                button.className = "button button-primary";
+                button.type = "button";
+                button.textContent = "Get Script";
+
+                button.addEventListener("click", function () {
+                    openUnlock(script.id);
+                });
+
+                content.appendChild(title);
+                content.appendChild(description);
+                content.appendChild(button);
+
+                card.appendChild(image);
+                card.appendChild(content);
+
+                grid.appendChild(card);
+            });
+
+            getElement("scriptCount").textContent =
+                `${SCRIPTS.length} ${SCRIPTS.length === 1 ? "script" : "scripts"}`;
+        }
+
+        function getYouTubeId(url) {
+            if (!url) {
+                return null;
+            }
+
+            try {
+                const parsed = new URL(url);
+
+                if (parsed.hostname === "youtu.be") {
+                    return parsed.pathname.split("/")[1] || null;
+                }
+
+                if (parsed.hostname.includes("youtube.com")) {
+                    if (parsed.pathname === "/watch") {
+                        return parsed.searchParams.get("v");
+                    }
+
+                    if (parsed.pathname.startsWith("/shorts/")) {
+                        return parsed.pathname.split("/")[2] || null;
+                    }
+
+                    if (parsed.pathname.startsWith("/embed/")) {
+                        return parsed.pathname.split("/")[2] || null;
+                    }
+                }
+            } catch (error) {
+                return null;
+            }
+
+            return null;
+        }
+
+        function normalizeVideoUrl(url) {
+            const youtubeId = getYouTubeId(url);
+
+            if (youtubeId) {
+                return `https://www.youtube.com/embed/${youtubeId}?rel=0`;
+            }
+
+            return url;
+        }
+
+        function isDirectVideo(url) {
+            if (!url) {
+                return false;
+            }
+
+            return /\.(mp4|webm|ogg)(\?.*)?$/i.test(url);
+        }
+
+        function renderVideo(containerId, url, title) {
+            const container = getElement(containerId);
+
+            if (!container || !url) {
+                return;
+            }
+
+            container.innerHTML = "";
+
+            if (isDirectVideo(url)) {
+                const video = document.createElement("video");
+                video.src = url;
+                video.controls = true;
+                video.playsInline = true;
+                video.preload = "metadata";
+                video.title = title;
+                container.appendChild(video);
+                return;
+            }
+
+            const video = document.createElement("iframe");
+                video.src = normalizeVideoUrl(url);
+                video.title = title;
+                video.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+                video.allowFullscreen = true;
+                container.appendChild(video);
+        }
+
+        function openUnlock(scriptId) {
+            selectedScript = SCRIPTS.find(function (script) {
+                return script.id === scriptId;
+            });
+
+            if (!selectedScript) {
+                return;
+            }
+
+            completedTasks = new Set();
+            renderTasks();
+
+            getElement("unlockModal").classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            getElement("unlockModal").classList.remove("show");
+            document.body.style.overflow = "";
+        }
+
+        function renderTasks() {
+            const taskList = getElement("taskList");
+
+            taskList.innerHTML = "";
+
+            const tasks = [
+                {
+                    id: "subscribe",
+                    title: "Subscribe to YouTube",
+                    description: "Open your channel and subscribe.",
+                    url: SITE.subscribeUrl
+                },
+                {
+                    id: "like",
+                    title: "Like the Video",
+                    description: "Open the video and press Like.",
+                    url: SITE.likeUrl
+                },
+                {
+                    id: "discord",
+                    title: "Join Discord",
+                    description: "Open your Discord invite and join.",
+                    url: SITE.discordUrl
+                }
+            ];
+
+            tasks.forEach(function (task) {
+                const isComplete = completedTasks.has(task.id);
+
+                const row = document.createElement("div");
+                row.className = "task";
+
+                if (isComplete) {
+                    row.classList.add("done");
+                }
+
+                const text = document.createElement("div");
+
+                const title = document.createElement("strong");
+                title.textContent = task.title;
+
+                const description = document.createElement("span");
+                description.textContent = task.description;
+
+                const button = document.createElement("button");
+                button.className = "task-button";
+                button.type = "button";
+                button.textContent = isComplete ? "Completed ✓" : "Open";
+
+                button.addEventListener("click", function () {
+                    completeTask(task);
+                });
+
+                text.appendChild(title);
+                text.appendChild(description);
+
+                row.appendChild(text);
+                row.appendChild(button);
+                taskList.appendChild(row);
+            });
+
+            const finished = tasksAreComplete();
+
+            getElement("unlockButton").disabled = !finished;
+            getElement("unlockButton").style.opacity = finished ? "1" : "0.5";
+            getElement("unlockMessage").classList.toggle("show", finished);
+        }
+
+        function completeTask(task) {
+            if (task.url) {
+                window.open(task.url, "_blank", "noopener,noreferrer");
+            }
+
+            /*
+                DEMO MODE:
+                Clicking Open marks the task complete.
+
+                This does not really verify YouTube subscriptions or likes.
+                Replace this function with your own verification system later.
+            */
+
+            completedTasks.add(task.id);
+            renderTasks();
+        }
+
+        function tasksAreComplete() {
+            return (
+                completedTasks.has("subscribe") &&
+                completedTasks.has("like") &&
+                completedTasks.has("discord")
+            );
+        }
+
+        function finishUnlock() {
+            if (!selectedScript || !tasksAreComplete()) {
+                return;
+            }
+
+            closeModal();
+            openScriptPage(selectedScript);
+        }
+
+        getElement("unlockButton").addEventListener("click", finishUnlock);
+
+        function openScriptPage(script) {
+            getElement("homePage").classList.add("hidden");
+            getElement("scriptPage").classList.add("show");
+
+            getElement("scriptPageTitle").textContent = script.name;
+            getElement("scriptPageDescription").textContent = script.description;
+            getElement("scriptMeta").textContent = script.label || "Lua";
+            getElement("codeBlock").textContent = script.code || "";
+
+            const videoSection = getElement("scriptVideoSection");
+
+            if (script.video) {
+                renderVideo("scriptVideoBox", script.video, `${script.name} tutorial`);
+                videoSection.classList.remove("hidden");
+            } else {
+                getElement("scriptVideoBox").innerHTML = "";
+                videoSection.classList.add("hidden");
+            }
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        async function copyScript() {
+            const code = getElement("codeBlock").textContent;
+            const button = getElement("copyButton");
+
+            try {
+                await navigator.clipboard.writeText(code);
+            } catch (error) {
+                const textarea = document.createElement("textarea");
+
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                textarea.remove();
+            }
+
+            button.textContent = "Copied ✓";
+            button.classList.add("copied");
+
+            setTimeout(function () {
+                button.textContent = "Copy Script";
+                button.classList.remove("copied");
+            }, 1800);
+        }
+
+        function showHome() {
+            getElement("scriptPage").classList.remove("show");
+            getElement("homePage").classList.remove("hidden");
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        getElement("unlockModal").addEventListener("click", function (event) {
+            if (event.target.id === "unlockModal") {
+                closeModal();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+        initializeWebsite();
+    </script>
+</body>
+</html>
